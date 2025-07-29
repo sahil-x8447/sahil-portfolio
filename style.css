@@ -648,6 +648,8 @@ span {
         display: block;
     }
 }
+
+
 /* Responsive tweaks for home section */
 @media (max-width: 768px) {
     .home {
@@ -714,4 +716,3 @@ span {
         width: 90%;
     }
 }
-
