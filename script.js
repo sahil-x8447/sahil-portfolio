@@ -33,6 +33,7 @@ ScrollReveal().reveal('.skill-tags, .project-grid, .project-card', { origin: 'bo
 ScrollReveal().reveal('.education-column', { origin: 'left' });
 ScrollReveal().reveal('.about-content, .about-img', { origin: 'right' });
 
+
 function erase() {
     if (charIndex > 0) {
         typingElement.textContent = roles[index].substring(0, charIndex - 1);
@@ -48,25 +49,34 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(type, 500);
 });
 
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-    e.preventDefault();
 
-    const formMessage = document.getElementById("formMessage");
 
-    const name = e.target.name.value.trim();
-    const email = e.target.email.value.trim();
-    const message = e.target.message.value.trim();
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
 
-    if (!name || !email || !message) {
-        formMessage.style.color = "red";
-        formMessage.textContent = "Please fill in all fields.";
-        return;
+  const form = e.target;
+  const formMessage = document.getElementById("formMessage");
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch("https://formspree.io/f/xpwlrgay", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json'
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      formMessage.style.color = "lightgreen";
+      formMessage.textContent = "Thank you! Your message has been sent.";
+      form.reset();
+    } else {
+      formMessage.style.color = "red";
+      formMessage.textContent = "Oops! Something went wrong. Please try again.";
     }
-
-    // Simulated form submission
-    formMessage.style.color = "green";
-    formMessage.textContent = "Thank you! Your message has been sent.";
-
-    e.target.reset();
+  } catch (error) {
+    formMessage.style.color = "red";
+    formMessage.textContent = "Error submitting form. Please check your connection.";
+  }
 });
-
